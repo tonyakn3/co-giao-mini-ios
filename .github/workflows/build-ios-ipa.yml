@@ -1,0 +1,36 @@
+name: Build unsigned iOS IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build unsigned app
+        run: |
+          set -e
+          xcodebuild             -project CoGiaoMini.xcodeproj             -scheme CoGiaoMini             -configuration Release             -sdk iphoneos             -derivedDataPath build             CODE_SIGNING_ALLOWED=NO             CODE_SIGNING_REQUIRED=NO             CODE_SIGN_IDENTITY=""             build
+
+      - name: Package unsigned IPA
+        run: |
+          set -e
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/CoGiaoMini.app Payload/
+          /usr/bin/zip -qry CoGiaoMini-unsigned.ipa Payload
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: CoGiaoMini-unsigned-IPA
+          path: CoGiaoMini-unsigned.ipa
