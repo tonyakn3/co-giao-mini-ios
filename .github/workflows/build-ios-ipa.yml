@@ -7,15 +7,24 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-15
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Select Xcode 16.4
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+          xcodebuild -version
+          swift --version
 
       - name: Install XcodeGen
         run: brew install xcodegen
 
       - name: Generate Xcode project
-        run: xcodegen generate
+        run: |
+          xcodegen generate
+          grep -n "objectVersion" CoGiaoMini.xcodeproj/project.pbxproj | head -1 || true
 
       - name: Build unsigned app
         run: |
