@@ -1,0 +1,27 @@
+name: CoGiaoMini
+options:
+  bundleIdPrefix: com.cogiaomini
+  deploymentTarget:
+    iOS: "16.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+targets:
+  CoGiaoMini:
+    type: application
+    platform: iOS
+    sources:
+      - path: CoGiaoMini
+    resources:
+      - path: CoGiaoMini/Resources
+    info:
+      path: CoGiaoMini/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.cogiaomini.local
+        PRODUCT_NAME: CoGiaoMini
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_STYLE: Automatic
+    scheme:
+      testTargets: []
